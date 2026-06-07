@@ -1,0 +1,6 @@
+scenario,n_adapt,n_holdout,overlap,overlap_ids
+0_shot_per_conc,0,20,0,[]
+1_shot_per_conc,10,10,0,[]
+2_shot_per_conc,20,0,0,[]
+5_shot_per_conc,20,0,0,[]
+10_shot_per_conc,20,0,0,[]

@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PyCharm / IDE
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+.tmp/
+tmp/
+temp/
+
+# Test / cache
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local raw data: do not upload UCI raw TXT files
+/data/raw/
+!data/README.md
+
+# Local model/checkpoint artifacts
+models/
+checkpoints/
+*.pkl
+*.joblib
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

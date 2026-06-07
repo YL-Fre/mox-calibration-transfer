@@ -1,0 +1,17 @@
+{
+  "raw": {
+    "n_features": 48,
+    "leakage_overlap": [],
+    "ok": true
+  },
+  "physics": {
+    "n_features": 71,
+    "leakage_overlap": [],
+    "ok": true
+  },
+  "combined": {
+    "n_features": 119,
+    "leakage_overlap": [],
+    "ok": true
+  }
+}

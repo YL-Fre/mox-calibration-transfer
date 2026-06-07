@@ -1,0 +1,3 @@
+Target,Failure Mode,0-shot RMSE,Best RMSE,Best Method,Best Shots,Relative Improvement
+B1,Target-intrinsic ?,15.380743972781355,11.344421204202195,rf_weighted_retraining,10,0.26242701755663234
+B5,Coverage-limited,24.395424135480816,16.26447706027761,rf_weighted_retraining,5,0.3332980410608037

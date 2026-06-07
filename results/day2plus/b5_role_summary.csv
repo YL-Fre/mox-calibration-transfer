@@ -1,0 +1,4 @@
+question,value
+B5 as held-out target RMSE,3.5204314366281877
+B5-inclusive source mean RMSE to non-B5,6.92234251031863
+clean-only source mean RMSE to non-B5,7.347323525848602
