@@ -24,6 +24,7 @@ for metal oxide sensor arrays on the UCI Twin Gas Sensor Arrays dataset**
 Most calibration transfer studies report whether transfer works.
 This project investigates why transfer fails.
 The result is a practical failure-mode taxonomy that links machine learning performance to underlying sensor behavior.
+
 ---
 ## Quick Summary
 
