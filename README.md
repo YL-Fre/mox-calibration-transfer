@@ -29,9 +29,7 @@ The result is a practical failure-mode taxonomy that links machine learning perf
 ## Quick Summary
 
 Five physically independent MOx sensor boards. Four combustible gases. One core question: can a calibration model trained on some boards transfer reliably to a board it has never seen?
-
 This study answers that question — and finds that transfer failures are not all the same. Board B5 failed because the source domain did not cover its feature space; a handful of labeled calibration points reduced its RMSE by more than 80–90%. Board B1 failed for a different reason: systematic response compression at high methane concentrations (~−25 ppm signed error at 100 ppm) that persisted even after adaptation. Two boards, similar transfer metrics, completely different physical causes, completely different engineering remedies.
-
 Physics-informed features (normalized Rs/R₀ ratios, response-magnitude descriptors) outperformed raw sensor values across all transfer scenarios. Simple global mean/std alignment outperformed complex piecewise corrections under realistic small-calibration-set conditions. A label leakage issue discovered mid-study was caught, diagnosed, and corrected — the corrected results are materially different and form the basis of all conclusions.
 
 The project is eight experimental phases, eleven notebooks, and one clear practical recommendation:
