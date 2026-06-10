@@ -1,9 +1,23 @@
 # MOx Calibration Transfer for Combustible Gas Detection
 
-**Cross-board generalization, few-shot adaptation, and failure-mode analysis  
-for metal oxide sensor arrays on the UCI Twin Gas Sensor Arrays dataset**
+Physics-informed calibration transfer and failure-mode analysis
+using the UCI Twin Gas Sensor Arrays dataset.
 
----
+## Project Report
+
+A detailed technical portfolio report is available here:
+
+📄 [MOx_Calibration_Transfer_Portfolio_Report.pdf](docs/MOx_Calibration_Transfer_Portfolio_Report.pdf)
+
+The report includes:
+
+- Physics-informed feature engineering
+- Cross-board transfer analysis
+- Few-shot adaptation
+- Failure-mode taxonomy
+- Sensor-physics interpretation
+- Label leakage investigation
+- Deployment recommendations
 
 ## Research Highlights
 
@@ -26,15 +40,43 @@ This project investigates why transfer fails.
 The result is a practical failure-mode taxonomy that links machine learning performance to underlying sensor behavior.
 
 ---
+
 ## Quick Summary
 
-Five physically independent MOx sensor boards. Four combustible gases. One core question: can a calibration model trained on some boards transfer reliably to a board it has never seen?
-This study answers that question — and finds that transfer failures are not all the same. Board B5 failed because the source domain did not cover its feature space; a handful of labeled calibration points reduced its RMSE by more than 80–90%. Board B1 failed for a different reason: systematic response compression at high methane concentrations (~−25 ppm signed error at 100 ppm) that persisted even after adaptation. Two boards, similar transfer metrics, completely different physical causes, completely different engineering remedies.
-Physics-informed features (normalized Rs/R₀ ratios, response-magnitude descriptors) outperformed raw sensor values across all transfer scenarios. Simple global mean/std alignment outperformed complex piecewise corrections under realistic small-calibration-set conditions. A label leakage issue discovered mid-study was caught, diagnosed, and corrected — the corrected results are materially different and form the basis of all conclusions.
+Five independent MOx sensor boards were used to investigate calibration transfer for methane sensing.
 
-The project is eight experimental phases, eleven notebooks, and one clear practical recommendation:
+The project identified two distinct transfer failure modes:
 
-> **Classify the failure mode before choosing a remediation strategy.**
+- Coverage-limited failure (Board B5), highly recoverable with few-shot adaptation.
+- Target-intrinsic failure (Board B1), characterized by persistent high-concentration response compression.
+
+Physics-informed features improved zero-shot transfer performance (R² = 0.957 vs 0.921), while simple mean/std alignment consistently outperformed more complex adaptation methods under realistic calibration budgets.
+
+The central finding:
+
+> Not all calibration transfer failures are the same — and the remedy depends on the mechanism.
+
+---
+
+## Project Architecture
+
+```mermaid
+flowchart LR
+
+    A[Raw Sensor Data]
+
+    B[Physics-Informed<br/>Feature Engineering]
+
+    C[Zero-Shot<br/>Calibration Transfer]
+
+    D[Few-Shot<br/>Adaptation]
+
+    E[Failure Mode<br/>Analysis]
+
+    F[Engineering<br/>Recommendations]
+
+    A --> B --> C --> D --> E --> F
+```
 
 ---
 
@@ -99,90 +141,55 @@ This project investigates calibration transfer for combustible gas detection (me
 The emphasis throughout is on **interpretable methods, scientific rigor, and deployment realism** — not benchmark overfitting.
 
 ---
-
 ## Scientific Contributions
 
-### 1. Two distinct transfer failure modes identified
+### 1. Failure-Mode Taxonomy
+Coverage-limited (B5) vs Target-intrinsic (B1)
 
-Systematic cross-board stress testing revealed that calibration transfer difficulty is **not uniform** across target boards and cannot be explained by a single mechanism.
+### 2. Physics-Informed Features
+Rs/R0 and normalized response improve transfer robustness
 
-Two failure modes were identified and characterized:
+### 3. Simple Alignment Beats Complex Methods
+Mean/std alignment outperformed more sophisticated corrections under small adaptation budgets
 
-**Coverage-limited transfer** (representative target: Board 5)
-- Transfer error correlates strongly with source-domain coverage metrics (explained variance volume, effective dimensionality, high-concentration coverage)
-- Sensitive to source-board selection and diversity
-- Highly responsive to few-shot target-side adaptation
-- RMSE reduced by >80–90% after statistical alignment with a small number of target calibration points
+### 4. Scientific Rigor
+Label leakage was discovered, diagnosed, and corrected during development
 
-**Target-intrinsic transfer failure** (representative target: Board 1)
-- Exhibits systematic concentration-dependent response compression: predictions underestimate true methane concentration at high concentrations, reaching approximately −25 ppm signed error near 100 ppm
-- Error pattern is **independent of source-board selection** — increasing source diversity does not resolve it
-- Coverage and geometry metrics show weak predictive power for this board
-- Few-shot adaptation provides only partial correction (~27% RMSE reduction; residual compression persists)
+See Portfolio Report for details.
 
-This taxonomy has direct engineering implications: the appropriate remediation strategy differs qualitatively between the two failure modes.
+---
+## Sensor Physics Background
 
-### 2. Physics-informed feature engineering improves transfer robustness
+MOx sensors exhibit board-to-board variability in baseline resistance, gain, heater operating point, and recovery dynamics.
 
-Physics-informed features — normalized response ratios, Rs/R₀ metrics, baseline-referenced descriptors — outperform raw sensor magnitudes for cross-board transfer. On Board 5, the best physics-informed model achieved R² = 0.957 versus R² = 0.921 for raw features under identical transfer conditions.
+Physics-informed features (Rs/R0, normalized response, baseline-referenced descriptors) reduce nuisance variation and improve calibration transfer robustness.
 
-The Day 5 transferability analysis identified specific features with low board-to-board coefficient of variation and monotonic concentration response that remain stable across all five boards. These represent candidates for board-invariant sensing descriptors in practical deployment.
-
-### 3. Simple statistical alignment is competitive with complex corrections
-
-A key null result: physics-aware concentration-regime splitting, piecewise recalibration, and quadratic saturation-residual correction **did not consistently outperform** simple global mean/std alignment under realistic few-shot conditions.
-
-This suggests that the dominant board-to-board mismatch is low-order statistical deformation (baseline offset, gain shift) rather than highly nonlinear response distortion. Complex local corrections overfit severely under the small target calibration sets available in realistic deployment scenarios.
-
-### 4. Label leakage discovered and corrected mid-study
-
-During Day 4 development, a label leakage issue was identified: the `concentration_numeric` column had entered the model feature space, producing unrealistically perfect predictions. This was caught, diagnosed, and corrected. The corrected results are materially different from the leaked results and are the basis for all scientific conclusions. The debugging process is documented in `results/day4/` and serves as a reproducibility checkpoint.
+For a detailed discussion, see the Portfolio Report.
 
 ---
 ## Project Timeline
 
-Day1  Dataset Understanding
-  ↓
-Day2  Baseline Transfer
-  ↓
-Day2+ Cross-Board Stress Testing
-  ↓
-Day2.5 B1 Failure Investigation
-  ↓
-Day3  Few-Shot Adaptation
-  ↓
-Day3.5 B1 Rescue Study
-  ↓
-Day4  Physics-Aware Adaptation
-  ↓
-Day5  Failure Mode Analysis
----
-## Experimental Progression
+```mermaid
+flowchart TD
 
-| Phase | Notebook(s) | Key Question | Key Finding |
-|---|---|---|---|
-| **Day 1** | 01 | What does the sensor physics look like across boards? | Shared temporal structure; differing baseline, gain, and recovery dynamics |
-| **Day 2** | 02 | Can a source-trained model transfer to a held-out board? | Physics-informed features reduce B5 RMSE by ~27% vs raw (R²: 0.957 vs 0.921) |
-| **Day 2+** | 03–06 | How does transfer difficulty vary across all board pairs? | Two failure modes emerge; geometry alone does not predict transfer success |
-| **Day 2.5** | 07 | What is the root cause of B1 anomalous behavior? | Systematic high-concentration response compression, independent of source selection |
-| **Day 3** | 08 | Can few labeled target samples rescue B5? | Yes — >80–90% RMSE reduction; Board 5 is coverage-limited |
-| **Day 3.5** | 09 | Can the same approach rescue B1? | Partial (~27% RMSE reduction); high-concentration compression persists |
-| **Day 4** | 10 | Do physics-aware corrections outperform simple alignment? | No — complex methods overfit under small adaptation budgets |
-| **Day 5** | 11 | Can B1 and B5 be distinguished mechanistically? | Yes — quantitative diagnostic scores confirm two distinct failure modes |
+    D1[Day 1<br/>Sensor Physics & Dataset Understanding]
+    D2[Day 2<br/>Zero-Shot Calibration Transfer]
+    D25[Day 2+<br/>Cross-Board Stress Testing]
+    D3[Day 3<br/>Few-Shot Adaptation on B5]
+    D35[Day 3.5<br/>B1 Rescue Study]
+    D4[Day 4<br/>Physics-Aware Adaptation]
+    D5[Day 5<br/>Failure Mode Analysis]
+
+    D1 --> D2
+    D2 --> D25
+    D25 --> D3
+    D25 --> D35
+    D3 --> D4
+    D35 --> D4
+    D4 --> D5
+```
 
 ---
-
-## Sensor Physics Background
-
-MOx sensors operate by measuring the change in surface resistance of a metal oxide film (typically SnO₂ or WO₃) in the presence of reducing or oxidizing gases. The measurement signal — commonly expressed as Rs/R₀ (sensor resistance normalized to baseline) or ΔR/R — is influenced by several board-dependent effects:
-
-- **Baseline resistance (R₀):** Varies across boards due to manufacturing tolerances in film deposition thickness and dopant concentration
-- **Response gain:** The slope of the Rs-vs-concentration curve differs between boards due to surface area variation and active site density
-- **Temperature dependence:** Heater power variation shifts the operating point of the metal oxide and affects sensitivity
-- **Recovery dynamics:** Board 5 shows noticeably slower recovery, likely reflecting differences in oxide microstructure or surface site density
-- **Concentration-dependent nonlinearity:** At high gas loading, MOx sensors enter a compressed response regime as surface sites approach saturation — the physical basis for the B1 high-concentration compression hypothesis
-
-Physics-informed features (normalized ratios, Rs/R₀ metrics, response magnitude relative to baseline) partially decouple these effects and reduce the board-specific shift that degrades transfer performance.
 
 ---
 
